@@ -1,0 +1,84 @@
+ -  SQL: SELECT _code, _name FROM province WHERE id = 1;
+
+ -  Query: $this->db->table(province)->where('id', '=', '1')->where('_name', '=', 'Loc')->get();
+
+ -  SQL Result: SELECT * FROM province WHERE id = 1 AND name = 'Loc';
+
+ 1. where: $this->db->table()->where(field, compare, value)
+
+ 2. orWhere: $this->db->table()->orWhere(field, compare, value)
+
+ 3. get(): $this->db->table()->get();
+
+ 4. first(): $this->db->table()->first();
+
+ 5. table(): $this->db->table(name);
+
+ 6. join(): $this->db->table()->join(tableName, condition);
+
+ 7. limit(): $this->db->table()->limit(offset, number);
+
+ 8. insert(): $this->db->table()->insert($data);
+
+ 9. update(): $this->db->table()->where(field, compare, value)->update($data)
+
+ 10. delete(): $this->db->table()->where(field, compare, value)->delete();
+
+ 11. whereLike(): $this->db->whereLike(field, value)
+
+ 12. select(): $this->db->select(field)
+
+ 13. orderBy(): $this->db->orderBy(field, type)
+
+ 14. lastId(): $this->db->lastId();
+
+ <--------------------------------------------------------------------------------------------->
+
+Validate Form:
+ if($request->isPost()){
+ 	// thực hiện set rule, mess, run validate
+ }else{
+ 	$response = new Response();
+ 	$response->redirect('users.add');
+ }
+ 1. Set rules
+ 	- fieldname
+ 	- Rules
+ 	VD về set rules:
+
+ 	$request->rules([
+ 		'fullname' => 'required|min:5|max:30',
+ 		'email'	   => 'required|email|min:6|unique:tbl_sinhvien:email',
+ 		'password' => 'required|min:3',
+ 		'confirm_password' => 'required|match:password'
+ 	]);
+
+ 2. Thông báo 
+ 	- fieldname
+ 	- errors
+ 	VD về set messages
+
+ 	$request->message([
+ 		'fullname.required' => 'Họ tên không được để trống',
+ 		'fullname.min'		=> 'Họ tên không được ít hơn 5 ký tự',
+ 		'fullname.max'		=> 'Họ tên không được nhiều hơn 30 ký tự',
+ 		...
+ 	]);
+
+ 3.Run validate()
+ 	- true
+ 	- false
+ 	VD về run validate
+
+ 	$validate = $request->validate();
+ 	if(!$validate){
+ 		$this->data['errors'] = $request->errors();
+ 		$this->data['old'] = $request->getFields();
+ 	}
+
+ 	$this->view('users.add', $this->data);
+
+ 4. Cú pháp báo lỗi
+ 	if(!empty($errors) && array_key_exists('fullname', $errors)){
+ 		echo $errors['fullname'];
+ 	}
